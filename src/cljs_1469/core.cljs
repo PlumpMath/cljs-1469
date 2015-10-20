@@ -1,9 +1,18 @@
 (ns cljs-1469.core
-  (:require [clojure.browser.repl :as repl]))
-
-;; (defonce conn
-;;   (repl/connect "http://localhost:9000/repl"))
+  (:require-macros [cljs.core.async.macros :refer [go]])
+  (:require [cljs.core.async :refer [timeout chan >! <!]]))
 
 (enable-console-print!)
 
-(println "Hello world!")
+(def c (chan))
+
+(go
+  (<! (timeout 1000))
+  (println "Hello world!"))
+
+(go
+  (<! c)
+  (println "Goodbye!"))
+
+(go
+  (>! c :knock))
